@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise ❤️</title>
+
+<style>
+
+body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background:linear-gradient(135deg,#ff758c,#ff7eb3);
+color:white;
+text-align:center;
+overflow:hidden;
+}
+
+.section{
+display:none;
+height:100vh;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.active{
+display:flex;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:white;
+color:#ff4d79;
+font-size:16px;
+margin-top:20px;
+cursor:pointer;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+h1{
+font-size:2rem;
+}
+
+.cakes span{
+font-size:80px;
+margin:10px;
+cursor:pointer;
+}
+
+.memories{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+max-width:350px;
+}
+
+.memories img{
+width:100%;
+border-radius:10px;
+}
+
+.balloon{
+position:absolute;
+bottom:-100px;
+font-size:30px;
+animation:float 10s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+100%{transform:translateY(-120vh);}
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+<canvas id="confetti"></canvas>
+
+<!-- START -->
+<div class="section active" id="start">
+<h1>🎉 A Special Birthday Surprise 🎉</h1>
+<p>Today is not just a day… it's the celebration of someone very special ❤️</p>
+<button onclick="start()">Start Surprise</button>
+</div>
+
+<!-- PICK CAKE -->
+<div class="section" id="cakeSelect">
+<h1>🎂 Pick Your Cake</h1>
+
+<div class="cakes">
+<span onclick="next('candles')">🎂</span>
+<span onclick="next('candles')">🍰</span>
+<span onclick="next('candles')">🧁</span>
+</div>
+
+</div>
+
+<!-- ADD CANDLES -->
+<div class="section" id="candles">
+<h1>Add Candles</h1>
+<div id="cake">🎂</div>
+<button onclick="addCandle()">Add Candle 🕯️</button>
+<button onclick="next('blow')">Done</button>
+</div>
+
+<!-- BLOW -->
+<div class="section" id="blow">
+<h1>Make a Wish</h1>
+<div id="cake2">🎂🕯️🕯️🕯️</div>
+<button onclick="blow()">Blow Candles 💨</button>
+</div>
+
+<!-- KNIFE -->
+<div class="section" id="knife">
+<h1>Pick Knife</h1>
+<div style="font-size:60px;">🔪</div>
+<button onclick="cutCake()">Cut The Cake</button>
+</div>
+
+<!-- LOVE LETTER -->
+<div class="section" id="letter">
+<h1>💌 A Message For You</h1>
+<p id="typing"></p>
+<button onclick="next('memories')">See Our Memories</button>
+</div>
+
+<!-- MEMORIES -->
+<div class="section" id="memories">
+<h1>📸 Our Memories</h1>
+
+<div class="memories">
+
+<img src="https://picsum.photos/200?1">
+<img src="https://picsum.photos/200?2">
+<img src="https://picsum.photos/200?3">
+<img src="https://picsum.photos/200?4">
+<img src="https://picsum.photos/200?5">
+<img src="https://picsum.photos/200?6">
+<img src="https://picsum.photos/200?7">
+<img src="https://picsum.photos/200?8">
+<img src="https://picsum.photos/200?9">
+<img src="https://picsum.photos/200?10">
+
+</div>
+
+<button onclick="next('final')">Final Message</button>
+
+</div>
+
+<!-- FINAL -->
+<div class="section" id="final">
+<h1>❤️ Final Message</h1>
+
+<p>
+No matter how many birthdays pass, you will always remain someone incredibly special.
+
+Your smile lights up the darkest days and your presence makes life beautiful.
+
+May this new year of your life bring happiness, success, and dreams coming true.
+
+Happy Birthday once again.  
+You deserve all the love in the world. 🎉
+</p>
+
+</div>
+
+<script>
+
+function next(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function start(){
+document.getElementById("music").play();
+createBalloons();
+next('cakeSelect');
+}
+
+function addCandle(){
+document.getElementById("cake").innerHTML+="🕯️";
+}
+
+function blow(){
+document.getElementById("cake2").innerHTML="🎂";
+setTimeout(()=>next('knife'),1000);
+}
+
+function cutCake(){
+startConfetti();
+startFireworks();
+next('letter');
+typeMessage();
+}
+
+function createBalloons(){
+
+for(let i=0;i<15;i++){
+
+let b=document.createElement("div");
+b.className="balloon";
+b.style.left=Math.random()*100+"%";
+b.style.animationDuration=(6+Math.random()*5)+"s";
+b.innerHTML="🎈";
+document.body.appendChild(b);
+
+}
+
+}
+
+/* typing message */
+
+function typeMessage(){
+
+let text="You are one of the most wonderful people in my life. Every moment spent with you becomes a beautiful memory. Today I just want to remind you how loved and appreciated you are.";
+
+let i=0;
+
+let speed=40;
+
+function typing(){
+
+if(i<text.length){
+document.getElementById("typing").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,speed);
+}
+
+}
+
+typing();
+
+}
+
+/* confetti */
+
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let confetti=[];
+
+function startConfetti(){
+
+for(let i=0;i<200;i++){
+
+confetti.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height-canvas.height,
+size:Math.random()*6+3,
+speed:Math.random()*3+2
+});
+
+}
+
+animate();
+
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+confetti.forEach(c=>{
+
+ctx.fillStyle="white";
+ctx.fillRect(c.x,c.y,c.size,c.size);
+
+c.y+=c.speed;
+
+if(c.y>canvas.height){
+c.y=-10;
+}
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+/* fireworks */
+
+function startFireworks(){
+
+setInterval(()=>{
+
+let x=Math.random()*window.innerWidth;
+let y=Math.random()*window.innerHeight/2;
+
+ctx.beginPath();
+ctx.arc(x,y,5,0,Math.PI*2);
+ctx.fillStyle="yellow";
+ctx.fill();
+
+},400);
+
+}
+
+</script>
+
+</body>
+</html>
